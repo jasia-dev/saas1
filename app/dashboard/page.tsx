@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { AddLinkPanel } from "@/components/dashboard/add-link-panel";
+import { DashboardActivityProvider } from "@/components/dashboard/dashboard-activity-provider";
 import { DashboardToast } from "@/components/dashboard/dashboard-toast";
 import { EmptyState } from "@/components/dashboard/empty-state";
 import { LinkCard } from "@/components/dashboard/link-card";
@@ -143,7 +144,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         message={message}
       />
 
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5">
+      <DashboardActivityProvider>
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-5">
         <header className="rounded-[2rem] border border-[#e4e7eb] bg-white px-6 py-6 shadow-[0_12px_40px_rgba(17,17,17,0.04)] md:px-8">
           <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
             <div>
@@ -251,7 +253,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             </div>
           ) : null}
         </section>
-      </div>
+        </div>
+      </DashboardActivityProvider>
     </main>
   );
 }

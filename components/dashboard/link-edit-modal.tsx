@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
+import { useDashboardActivity } from "@/components/dashboard/dashboard-activity-provider";
 import { LinkEditor } from "@/components/dashboard/link-editor";
 
 type LinkEditModalProps = {
@@ -20,6 +21,8 @@ type LinkEditModalProps = {
 
 export function LinkEditModal({ isOpen, onClose, onExited, link }: LinkEditModalProps) {
   const firstInputRef = useRef<HTMLInputElement | null>(null);
+  const { activeMessage } = useDashboardActivity();
+  const isUpdating = isOpen && activeMessage === "Updating link...";
 
   useEffect(() => {
     if (isOpen) {
@@ -79,17 +82,24 @@ export function LinkEditModal({ isOpen, onClose, onExited, link }: LinkEditModal
             <h2 id={`edit-link-${link.id}`} className="mt-2 text-2xl font-semibold tracking-tight text-[#111111]">
               Edit link
             </h2>
+            {isUpdating ? (
+              <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-[#dde2e8] bg-[#f8f9fb] px-3 py-1 text-xs font-medium text-[#23262d]">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-[#111111]" />
+                Saving changes...
+              </div>
+            ) : null}
           </div>
           <button
             type="button"
             onClick={onClose}
+            disabled={isUpdating}
             className="inline-flex h-9 items-center justify-center rounded-full border border-[#dde2e8] bg-[#f8f9fb] px-4 text-sm font-semibold text-[#23262d] transition hover:border-[#cfd5dd] hover:bg-white"
           >
             Close
           </button>
         </div>
 
-        <div className="modal-content-enter max-h-[calc(100vh-8rem)] overflow-y-auto px-6 py-5 [animation-delay:60ms]">
+        <div className={`modal-content-enter max-h-[calc(100vh-8rem)] overflow-y-auto px-6 py-5 [animation-delay:60ms] ${isUpdating ? "opacity-80" : ""}`}>
           <LinkEditor
             mode="edit"
             submitLabel="Save changes"

@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import { useDashboardActivity } from "@/components/dashboard/dashboard-activity-provider";
 import { LinkEditModal } from "@/components/dashboard/link-edit-modal";
 import { deleteLinkAction } from "@/lib/links/actions";
 
@@ -28,13 +29,33 @@ function formatDate(value: string) {
 
 export function LinkCard({ link }: LinkCardProps) {
   const [modalState, setModalState] = useState<"closed" | "open" | "closing">("closed");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const activityIdRef = useRef<number | null>(null);
+  const { beginActivity, endActivity } = useDashboardActivity();
 
   const isEditModalMounted = modalState !== "closed";
   const isEditModalOpen = modalState === "open";
 
+  useEffect(() => {
+    return () => {
+      if (activityIdRef.current !== null) {
+        endActivity(activityIdRef.current);
+      }
+    };
+  }, [endActivity]);
+
+  function handleDeleteSubmit() {
+    if (isDeleting) {
+      return;
+    }
+
+    setIsDeleting(true);
+    activityIdRef.current = beginActivity("Deleting link...");
+  }
+
   return (
     <>
-      <article className="flex h-full flex-col rounded-[1.75rem] border border-[#e4e7eb] bg-white p-5 shadow-[0_10px_30px_rgba(17,17,17,0.03)] transition hover:border-[#d5dae1] hover:shadow-[0_18px_50px_rgba(17,17,17,0.05)]">
+      <article className={`flex h-full flex-col rounded-[1.75rem] border border-[#e4e7eb] bg-white p-5 shadow-[0_10px_30px_rgba(17,17,17,0.03)] transition hover:border-[#d5dae1] hover:shadow-[0_18px_50px_rgba(17,17,17,0.05)] ${isDeleting ? "scale-[0.985] opacity-70" : ""}`}>
         <div className="flex flex-1 flex-col gap-4">
           <div className="space-y-2">
             <a
@@ -78,18 +99,20 @@ export function LinkCard({ link }: LinkCardProps) {
           <button
             type="button"
             onClick={() => setModalState("open")}
+            disabled={isDeleting}
             className="inline-flex h-8 items-center justify-center rounded-full border border-[#dde2e8] bg-[#f8f9fb] px-3 text-xs font-semibold text-[#23262d] transition hover:border-[#cfd5dd] hover:bg-white active:scale-[0.98]"
           >
             Edit
           </button>
 
-          <form action={deleteLinkAction} className="shrink-0">
+          <form action={deleteLinkAction} className="shrink-0" onSubmit={handleDeleteSubmit}>
             <input type="hidden" name="id" value={link.id} />
             <button
               type="submit"
+              disabled={isDeleting}
               className="inline-flex h-8 items-center justify-center rounded-full border border-[#e5d7d7] bg-[#fbf7f7] px-3 text-xs font-semibold text-[#7d4444] transition hover:border-[#d9c8c8] hover:bg-white active:scale-[0.98]"
             >
-              Delete
+              {isDeleting ? "Deleting..." : "Delete"}
             </button>
           </form>
         </div>

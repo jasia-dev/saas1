@@ -1,7 +1,8 @@
 "use client";
 
-import { type RefObject, useState, useTransition } from "react";
+import { type RefObject, useEffect, useRef, useState, useTransition } from "react";
 
+import { useDashboardActivity } from "@/components/dashboard/dashboard-activity-provider";
 import { createLinkAction, updateLinkAction } from "@/lib/links/actions";
 import { parseTagList } from "@/lib/tags";
 
@@ -30,6 +31,9 @@ export function LinkEditor({
   const [tags, setTags] = useState((initialValues?.tags ?? []).join(", "));
   const [aiMessage, setAiMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const activityIdRef = useRef<number | null>(null);
+  const { beginActivity, endActivity } = useDashboardActivity();
 
   const action = mode === "create" ? createLinkAction : updateLinkAction;
   const formClassName = compact ? "grid w-full gap-4" : "grid w-full gap-5";
@@ -38,6 +42,34 @@ export function LinkEditor({
   const footerClassName = compact
     ? "flex flex-col gap-3"
     : "flex items-center justify-between gap-4";
+
+  useEffect(() => {
+    return () => {
+      if (activityIdRef.current !== null) {
+        endActivity(activityIdRef.current);
+      }
+    };
+  }, [endActivity]);
+
+  function handleSubmit() {
+    if (isSubmitting) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    activityIdRef.current = beginActivity(
+      mode === "create" ? "Saving link..." : "Updating link...",
+    );
+  }
+
+  function handleInvalidSubmit() {
+    if (activityIdRef.current !== null) {
+      endActivity(activityIdRef.current);
+      activityIdRef.current = null;
+    }
+
+    setIsSubmitting(false);
+  }
 
   async function handleRecommendTags(formData: FormData) {
     setAiMessage(null);
@@ -72,7 +104,12 @@ export function LinkEditor({
   }
 
   return (
-    <form action={action} className={formClassName}>
+    <form
+      action={action}
+      className={`${formClassName} ${isSubmitting ? "opacity-80" : ""}`}
+      onSubmit={handleSubmit}
+      onInvalid={handleInvalidSubmit}
+    >
       {mode === "edit" ? (
         <input type="hidden" name="id" value={initialValues?.id} />
       ) : null}
@@ -87,6 +124,7 @@ export function LinkEditor({
             defaultValue={initialValues?.url ?? ""}
             placeholder="https://example.com/article"
             required
+            disabled={isSubmitting}
             className="rounded-2xl border border-[#dde2e8] bg-white px-4 py-3 text-sm outline-none transition placeholder:text-[#9aa1ab] focus:border-[#111111]"
           />
         </label>
@@ -99,6 +137,7 @@ export function LinkEditor({
             defaultValue={initialValues?.title ?? ""}
             placeholder="Interesting article about product design"
             required
+            disabled={isSubmitting}
             className="rounded-2xl border border-[#dde2e8] bg-white px-4 py-3 text-sm outline-none transition placeholder:text-[#9aa1ab] focus:border-[#111111]"
           />
         </label>
@@ -111,6 +150,7 @@ export function LinkEditor({
           rows={3}
           defaultValue={initialValues?.description ?? ""}
           placeholder="Short summary or context"
+          disabled={isSubmitting}
           className="rounded-2xl border border-[#dde2e8] bg-white px-4 py-3 text-sm outline-none transition placeholder:text-[#9aa1ab] focus:border-[#111111]"
         />
       </label>
@@ -122,6 +162,7 @@ export function LinkEditor({
           rows={4}
           defaultValue={initialValues?.notes ?? ""}
           placeholder="Why do you want to keep this link?"
+          disabled={isSubmitting}
           className="rounded-2xl border border-[#dde2e8] bg-white px-4 py-3 text-sm outline-none transition placeholder:text-[#9aa1ab] focus:border-[#111111]"
         />
       </label>
@@ -138,11 +179,12 @@ export function LinkEditor({
             value={tags}
             onChange={(event) => setTags(event.target.value)}
             placeholder="design, product, inspiration"
+            disabled={isSubmitting}
             className="min-w-0 flex-1 rounded-2xl border border-[#dde2e8] bg-white px-4 py-3 text-sm outline-none transition placeholder:text-[#9aa1ab] focus:border-[#111111]"
           />
           <button
             type="button"
-            disabled={isPending}
+            disabled={isPending || isSubmitting}
             onClick={(event) => {
               const form = event.currentTarget.form;
 
@@ -167,13 +209,18 @@ export function LinkEditor({
         <p className="text-xs leading-5 text-[#7a828f]">
           Title is required for now. Metadata scraping can be added later.
         </p>
-        <button
-          type="submit"
-          className="inline-flex items-center justify-center rounded-full bg-[#111111] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#23262d] active:scale-[0.98]"
-        >
-          {submitLabel}
-        </button>
-      </div>
-    </form>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="inline-flex items-center justify-center rounded-full bg-[#111111] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#23262d] active:scale-[0.98]"
+          >
+            {isSubmitting
+              ? mode === "create"
+                ? "Saving..."
+                : "Updating..."
+              : submitLabel}
+          </button>
+        </div>
+      </form>
   );
 }
