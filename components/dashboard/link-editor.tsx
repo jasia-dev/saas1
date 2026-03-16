@@ -30,6 +30,12 @@ export function LinkEditor({
   const [isPending, startTransition] = useTransition();
 
   const action = mode === "create" ? createLinkAction : updateLinkAction;
+  const formClassName = compact ? "grid w-full gap-4" : "grid w-full gap-5";
+  const fieldGridClassName = compact ? "grid gap-4" : "grid gap-5 md:grid-cols-2";
+  const tagRowClassName = compact ? "flex flex-col gap-2" : "flex flex-col gap-3 md:flex-row";
+  const footerClassName = compact
+    ? "flex flex-col gap-3"
+    : "flex items-center justify-between gap-4";
 
   async function handleRecommendTags(formData: FormData) {
     setAiMessage(null);
@@ -64,12 +70,12 @@ export function LinkEditor({
   }
 
   return (
-    <form action={action} className="grid gap-5">
+    <form action={action} className={formClassName}>
       {mode === "edit" ? (
         <input type="hidden" name="id" value={initialValues?.id} />
       ) : null}
 
-      <div className={`grid gap-5 ${compact ? "" : "md:grid-cols-2"}`}>
+      <div className={fieldGridClassName}>
         <label className="grid gap-2 text-sm font-medium text-stone-700">
           URL
           <input
@@ -78,7 +84,7 @@ export function LinkEditor({
             defaultValue={initialValues?.url ?? ""}
             placeholder="https://example.com/article"
             required
-            className="rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-stone-500"
+            className="rounded-2xl border border-[#dde2e8] bg-white px-4 py-3 text-sm outline-none transition placeholder:text-[#9aa1ab] focus:border-[#111111]"
           />
         </label>
 
@@ -90,7 +96,7 @@ export function LinkEditor({
             defaultValue={initialValues?.title ?? ""}
             placeholder="Interesting article about product design"
             required
-            className="rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-stone-500"
+            className="rounded-2xl border border-[#dde2e8] bg-white px-4 py-3 text-sm outline-none transition placeholder:text-[#9aa1ab] focus:border-[#111111]"
           />
         </label>
       </div>
@@ -102,7 +108,7 @@ export function LinkEditor({
           rows={3}
           defaultValue={initialValues?.description ?? ""}
           placeholder="Short summary or context"
-          className="rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-stone-500"
+          className="rounded-2xl border border-[#dde2e8] bg-white px-4 py-3 text-sm outline-none transition placeholder:text-[#9aa1ab] focus:border-[#111111]"
         />
       </label>
 
@@ -113,7 +119,7 @@ export function LinkEditor({
           rows={4}
           defaultValue={initialValues?.notes ?? ""}
           placeholder="Why do you want to keep this link?"
-          className="rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-stone-500"
+          className="rounded-2xl border border-[#dde2e8] bg-white px-4 py-3 text-sm outline-none transition placeholder:text-[#9aa1ab] focus:border-[#111111]"
         />
       </label>
 
@@ -121,7 +127,7 @@ export function LinkEditor({
         <label className="text-sm font-medium text-stone-700" htmlFor={`${mode}-tags`}>
           Tags
         </label>
-        <div className="flex flex-col gap-3 md:flex-row">
+        <div className={tagRowClassName}>
           <input
             id={`${mode}-tags`}
             name="tags"
@@ -129,7 +135,7 @@ export function LinkEditor({
             value={tags}
             onChange={(event) => setTags(event.target.value)}
             placeholder="design, product, inspiration"
-            className="min-w-0 flex-1 rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-stone-500"
+            className="min-w-0 flex-1 rounded-2xl border border-[#dde2e8] bg-white px-4 py-3 text-sm outline-none transition placeholder:text-[#9aa1ab] focus:border-[#111111]"
           />
           <button
             type="button"
@@ -143,24 +149,24 @@ export function LinkEditor({
 
               handleRecommendTags(new FormData(form));
             }}
-            className="inline-flex items-center justify-center rounded-full border border-stone-300 px-5 py-3 text-sm font-semibold text-stone-700 transition hover:border-stone-400 hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center justify-center rounded-full border border-[#dde2e8] bg-[#f8f9fb] px-5 py-3 text-sm font-semibold text-[#23262d] transition hover:border-[#cfd5dd] hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isPending ? "Thinking..." : "Recommend tags"}
           </button>
         </div>
-        <p className="text-xs leading-5 text-stone-500">
+        <p className="text-xs leading-5 text-[#7a828f]">
           Separate tags with commas. AI suggestions are merged into the current list.
         </p>
-        {aiMessage ? <p className="text-sm text-stone-600">{aiMessage}</p> : null}
+        {aiMessage ? <p className="text-sm text-[#616975]">{aiMessage}</p> : null}
       </div>
 
-      <div className="flex items-center justify-between gap-4">
-        <p className="text-xs leading-5 text-stone-500">
+      <div className={footerClassName}>
+        <p className="text-xs leading-5 text-[#7a828f]">
           Title is required for now. Metadata scraping can be added later.
         </p>
         <button
           type="submit"
-          className="inline-flex items-center justify-center rounded-full bg-stone-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-stone-800"
+          className="inline-flex items-center justify-center rounded-full bg-[#111111] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#23262d]"
         >
           {submitLabel}
         </button>

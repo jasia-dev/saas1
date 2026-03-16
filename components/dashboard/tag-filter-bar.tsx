@@ -12,18 +12,18 @@ export function TagFilterBar({ tags, activeTag }: TagFilterBarProps) {
   }
 
   return (
-    <section className="rounded-[1.75rem] border border-[#f0dfb9] bg-white p-5 shadow-[0_18px_50px_rgba(222,163,58,0.06)]">
+    <section className="rounded-[1.75rem] border border-[#e4e7eb] bg-white p-5 shadow-[0_12px_40px_rgba(17,17,17,0.04)]">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#b06f00]">Tag filter</p>
-          <p className="mt-1 text-sm text-stone-500">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6d7480]">Tag filter</p>
+          <p className="mt-1 text-sm text-[#7a828f]">
             Narrow the list to the topics you use most.
           </p>
         </div>
         {activeTag ? (
           <a
             href="/dashboard"
-            className="text-sm font-semibold text-stone-700 transition hover:text-stone-950"
+            className="text-sm font-semibold text-[#23262d] transition hover:text-[#111111]"
           >
             Clear tag filter
           </a>
@@ -41,8 +41,8 @@ export function TagFilterBar({ tags, activeTag }: TagFilterBarProps) {
               href={href}
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                 isActive
-                  ? "bg-[#ffb800] text-stone-950"
-                  : "border border-[#f1d48a] bg-[#fff6dc] text-[#9a6800] hover:bg-[#ffefbf]"
+                  ? "bg-[#111111] text-white"
+                  : "border border-[#dde2e8] bg-[#f8f9fb] text-[#23262d] hover:border-[#cfd5dd] hover:bg-white"
               }`}
             >
               #{tag.name} ({tag.count})

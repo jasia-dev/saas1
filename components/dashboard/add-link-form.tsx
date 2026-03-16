@@ -2,14 +2,14 @@ import { LinkEditor } from "@/components/dashboard/link-editor";
 
 export function AddLinkForm() {
   return (
-    <section className="rounded-[1.75rem] border border-stone-200 bg-stone-50 p-6 shadow-[0_14px_40px_rgba(28,25,23,0.04)]">
+    <section className="rounded-[1.75rem] border border-[#e7eaee] bg-[#fafbfc] p-6 shadow-[0_10px_30px_rgba(17,17,17,0.03)]">
       <div className="space-y-2">
-        <p className="text-sm font-medium text-amber-700">Add a link</p>
+        <p className="text-sm font-medium text-[#6d7480]">Add a link</p>
         <h2 className="text-2xl font-semibold tracking-tight text-stone-950">
           Save something useful
         </h2>
-        <p className="text-sm leading-6 text-stone-600">
-          Start with the core CRUD flow. Tags and search can build on top of this data.
+        <p className="text-sm leading-6 text-[#616975]">
+          Capture the source, write a clean title, and keep enough context for future search.
         </p>
       </div>
 

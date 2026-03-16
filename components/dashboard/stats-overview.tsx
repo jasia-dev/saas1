@@ -38,16 +38,19 @@ export function StatsOverview({
       {stats.map((stat) => (
         <article
           key={stat.key}
-          className="relative overflow-hidden rounded-[1.75rem] border border-[#f0dfb9] bg-[linear-gradient(180deg,_#fffdfa_0%,_#fff4d8_100%)] p-6 shadow-[0_20px_60px_rgba(222,163,58,0.08)]"
+          className="rounded-[1.75rem] border border-[#e4e7eb] bg-white px-5 py-4 shadow-[0_12px_40px_rgba(17,17,17,0.04)]"
         >
-          <div className="absolute right-4 top-4 h-16 w-16 rounded-full bg-[#ffd86f]/40 blur-xl" />
-          <p className="relative text-sm font-semibold uppercase tracking-[0.18em] text-[#b06f00]">
-            {stat.label}
-          </p>
-          <p className="relative mt-4 text-4xl font-semibold tracking-tight text-stone-950 md:text-5xl">
-            {values[stat.key]}
-          </p>
-          <p className="relative mt-3 text-sm leading-6 text-stone-600">{stat.description}</p>
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0">
+              <p className="truncate text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6d7480]">
+                {stat.label}
+              </p>
+              <p className="mt-1 truncate text-sm text-[#7a828f]">{stat.description}</p>
+            </div>
+            <p className="shrink-0 text-3xl font-semibold tracking-tight text-[#111111] md:text-4xl">
+              {values[stat.key]}
+            </p>
+          </div>
         </article>
       ))}
     </section>
