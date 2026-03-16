@@ -7,6 +7,7 @@ import { LinkEditor } from "@/components/dashboard/link-editor";
 type LinkEditModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  onExited: () => void;
   link: {
     id: string;
     url: string;
@@ -17,7 +18,7 @@ type LinkEditModalProps = {
   };
 };
 
-export function LinkEditModal({ isOpen, onClose, link }: LinkEditModalProps) {
+export function LinkEditModal({ isOpen, onClose, onExited, link }: LinkEditModalProps) {
   const firstInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -55,6 +56,11 @@ export function LinkEditModal({ isOpen, onClose, link }: LinkEditModalProps) {
       onClick={onClose}
       role="presentation"
       aria-hidden={!isOpen}
+      onAnimationEnd={(event) => {
+        if (!isOpen && event.target === event.currentTarget) {
+          onExited();
+        }
+      }}
     >
       <div
         className={`w-full max-w-2xl rounded-[2rem] border border-[#e4e7eb] bg-white shadow-[0_24px_80px_rgba(17,17,17,0.16)] ${

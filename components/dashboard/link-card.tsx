@@ -27,7 +27,10 @@ function formatDate(value: string) {
 }
 
 export function LinkCard({ link }: LinkCardProps) {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [modalState, setModalState] = useState<"closed" | "open" | "closing">("closed");
+
+  const isEditModalMounted = modalState !== "closed";
+  const isEditModalOpen = modalState === "open";
 
   return (
     <>
@@ -74,7 +77,7 @@ export function LinkCard({ link }: LinkCardProps) {
         <div className="mt-5 flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setIsEditModalOpen(true)}
+            onClick={() => setModalState("open")}
             className="inline-flex h-8 items-center justify-center rounded-full border border-[#dde2e8] bg-[#f8f9fb] px-3 text-xs font-semibold text-[#23262d] transition hover:border-[#cfd5dd] hover:bg-white active:scale-[0.98]"
           >
             Edit
@@ -92,18 +95,21 @@ export function LinkCard({ link }: LinkCardProps) {
         </div>
       </article>
 
-      <LinkEditModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        link={{
-          id: link.id,
-          url: link.url,
-          title: link.title,
-          description: link.description,
-          notes: link.notes,
-          tags: link.tags,
-        }}
-      />
+      {isEditModalMounted ? (
+        <LinkEditModal
+          isOpen={isEditModalOpen}
+          onClose={() => setModalState("closing")}
+          onExited={() => setModalState("closed")}
+          link={{
+            id: link.id,
+            url: link.url,
+            title: link.title,
+            description: link.description,
+            notes: link.notes,
+            tags: link.tags,
+          }}
+        />
+      ) : null}
     </>
   );
 }
