@@ -75,7 +75,7 @@ export function LinkCard({ link }: LinkCardProps) {
           <button
             type="button"
             onClick={() => setIsEditModalOpen(true)}
-            className="inline-flex h-8 items-center justify-center rounded-full border border-[#dde2e8] bg-[#f8f9fb] px-3 text-xs font-semibold text-[#23262d] transition hover:border-[#cfd5dd] hover:bg-white"
+            className="inline-flex h-8 items-center justify-center rounded-full border border-[#dde2e8] bg-[#f8f9fb] px-3 text-xs font-semibold text-[#23262d] transition hover:border-[#cfd5dd] hover:bg-white active:scale-[0.98]"
           >
             Edit
           </button>
@@ -84,7 +84,7 @@ export function LinkCard({ link }: LinkCardProps) {
             <input type="hidden" name="id" value={link.id} />
             <button
               type="submit"
-              className="inline-flex h-8 items-center justify-center rounded-full border border-[#e5d7d7] bg-[#fbf7f7] px-3 text-xs font-semibold text-[#7d4444] transition hover:border-[#d9c8c8] hover:bg-white"
+              className="inline-flex h-8 items-center justify-center rounded-full border border-[#e5d7d7] bg-[#fbf7f7] px-3 text-xs font-semibold text-[#7d4444] transition hover:border-[#d9c8c8] hover:bg-white active:scale-[0.98]"
             >
               Delete
             </button>

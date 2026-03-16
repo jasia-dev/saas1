@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { LinkEditor } from "@/components/dashboard/link-editor";
 
@@ -18,6 +18,14 @@ type LinkEditModalProps = {
 };
 
 export function LinkEditModal({ isOpen, onClose, link }: LinkEditModalProps) {
+  const firstInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      window.setTimeout(() => firstInputRef.current?.focus(), 120);
+    }
+  }, [isOpen]);
+
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -39,24 +47,25 @@ export function LinkEditModal({ isOpen, onClose, link }: LinkEditModalProps) {
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) {
-    return null;
-  }
-
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-4 py-6 backdrop-blur-[2px]"
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-4 py-6 backdrop-blur-[2px] ${
+        isOpen ? "modal-overlay-enter" : "pointer-events-none modal-overlay-exit"
+      }`}
       onClick={onClose}
       role="presentation"
+      aria-hidden={!isOpen}
     >
       <div
-        className="w-full max-w-2xl rounded-[2rem] border border-[#e4e7eb] bg-white shadow-[0_24px_80px_rgba(17,17,17,0.16)]"
+        className={`w-full max-w-2xl rounded-[2rem] border border-[#e4e7eb] bg-white shadow-[0_24px_80px_rgba(17,17,17,0.16)] ${
+          isOpen ? "modal-panel-enter" : "modal-panel-exit"
+        }`}
         onClick={(event) => event.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby={`edit-link-${link.id}`}
       >
-        <div className="flex items-center justify-between gap-4 border-b border-[#eef1f4] px-6 py-5">
+        <div className="modal-content-enter flex items-center justify-between gap-4 border-b border-[#eef1f4] px-6 py-5">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6d7480]">
               Link editor
@@ -74,10 +83,11 @@ export function LinkEditModal({ isOpen, onClose, link }: LinkEditModalProps) {
           </button>
         </div>
 
-        <div className="max-h-[calc(100vh-8rem)] overflow-y-auto px-6 py-5">
+        <div className="modal-content-enter max-h-[calc(100vh-8rem)] overflow-y-auto px-6 py-5 [animation-delay:60ms]">
           <LinkEditor
             mode="edit"
             submitLabel="Save changes"
+            initialFocusRef={firstInputRef}
             initialValues={{
               id: link.id,
               url: link.url,

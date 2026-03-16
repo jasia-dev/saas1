@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { type RefObject, useState, useTransition } from "react";
 
 import { createLinkAction, updateLinkAction } from "@/lib/links/actions";
 import { parseTagList } from "@/lib/tags";
@@ -17,6 +17,7 @@ type LinkEditorProps = {
   };
   submitLabel: string;
   compact?: boolean;
+  initialFocusRef?: RefObject<HTMLInputElement | null>;
 };
 
 export function LinkEditor({
@@ -24,6 +25,7 @@ export function LinkEditor({
   initialValues,
   submitLabel,
   compact = false,
+  initialFocusRef,
 }: LinkEditorProps) {
   const [tags, setTags] = useState((initialValues?.tags ?? []).join(", "));
   const [aiMessage, setAiMessage] = useState<string | null>(null);
@@ -79,6 +81,7 @@ export function LinkEditor({
         <label className="grid gap-2 text-sm font-medium text-stone-700">
           URL
           <input
+            ref={initialFocusRef}
             name="url"
             type="url"
             defaultValue={initialValues?.url ?? ""}
@@ -149,7 +152,7 @@ export function LinkEditor({
 
               handleRecommendTags(new FormData(form));
             }}
-            className="inline-flex items-center justify-center rounded-full border border-[#dde2e8] bg-[#f8f9fb] px-5 py-3 text-sm font-semibold text-[#23262d] transition hover:border-[#cfd5dd] hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center justify-center rounded-full border border-[#dde2e8] bg-[#f8f9fb] px-5 py-3 text-sm font-semibold text-[#23262d] transition hover:border-[#cfd5dd] hover:bg-white active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isPending ? "Thinking..." : "Recommend tags"}
           </button>
@@ -166,7 +169,7 @@ export function LinkEditor({
         </p>
         <button
           type="submit"
-          className="inline-flex items-center justify-center rounded-full bg-[#111111] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#23262d]"
+          className="inline-flex items-center justify-center rounded-full bg-[#111111] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#23262d] active:scale-[0.98]"
         >
           {submitLabel}
         </button>

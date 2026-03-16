@@ -27,9 +27,9 @@ export function DashboardToast({ status, message }: DashboardToastProps) {
   }
 
   return (
-    <div className="fixed right-5 top-5 z-50 max-w-sm">
+    <div className="fixed inset-x-0 top-5 z-50 flex justify-center px-4">
       <div
-        className={`rounded-[1.5rem] border px-5 py-4 shadow-[0_18px_40px_rgba(17,17,17,0.08)] backdrop-blur ${
+        className={`w-full max-w-sm rounded-[1.5rem] border px-5 py-4 shadow-[0_18px_40px_rgba(17,17,17,0.08)] backdrop-blur ${
           status === "success"
             ? "border-[#d9e7d9] bg-white text-[#285c31]"
             : "border-[#ead6d4] bg-white text-[#8a4037]"
