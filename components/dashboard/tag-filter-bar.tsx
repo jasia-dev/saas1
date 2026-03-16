@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type TagFilterBarProps = {
   tags: Array<{
     name: string;
@@ -21,12 +23,12 @@ export function TagFilterBar({ tags, activeTag }: TagFilterBarProps) {
           </p>
         </div>
         {activeTag ? (
-          <a
+          <Link
             href="/dashboard"
             className="text-sm font-semibold text-[#23262d] transition hover:text-[#111111]"
           >
             Clear tag filter
-          </a>
+          </Link>
         ) : null}
       </div>
 
@@ -36,7 +38,7 @@ export function TagFilterBar({ tags, activeTag }: TagFilterBarProps) {
           const isActive = activeTag === tag.name;
 
           return (
-            <a
+            <Link
               key={tag.name}
               href={href}
               className={`rounded-full px-4 py-2 text-sm font-medium transition ${
@@ -46,7 +48,7 @@ export function TagFilterBar({ tags, activeTag }: TagFilterBarProps) {
               }`}
             >
               #{tag.name} ({tag.count})
-            </a>
+            </Link>
           );
         })}
       </div>

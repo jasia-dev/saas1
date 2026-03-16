@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 import { LinkEditor } from "@/components/dashboard/link-editor";
@@ -51,13 +52,13 @@ export function LinkCard({ link }: LinkCardProps) {
           {link.tags.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {link.tags.map((tag) => (
-                <a
+                <Link
                   key={tag}
                   href={`/dashboard?tag=${encodeURIComponent(tag)}`}
                   className="rounded-full border border-[#dde2e8] bg-[#f8f9fb] px-3 py-1 text-xs font-medium text-[#23262d] transition hover:border-[#cfd5dd] hover:bg-white"
                 >
                   #{tag}
-                </a>
+                </Link>
               ))}
             </div>
           ) : null}

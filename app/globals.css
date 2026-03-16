@@ -19,6 +19,22 @@ body {
   min-height: 100vh;
 }
 
+@keyframes dashboard-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard-fade-in {
+  animation: dashboard-fade-in 220ms ease-out;
+}
+
 a {
   text-decoration: none;
 }

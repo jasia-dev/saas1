@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { AddLinkPanel } from "@/components/dashboard/add-link-panel";
@@ -208,12 +209,12 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                   Search
                 </button>
                 {query || activeTag ? (
-                  <a
+                  <Link
                     href="/dashboard"
                     className="inline-flex h-12 items-center justify-center rounded-full border border-[#dde2e8] bg-white px-5 text-sm font-semibold text-[#23262d] transition hover:bg-[#f8f9fb]"
                   >
                     Clear
-                  </a>
+                  </Link>
                 ) : null}
               </form>
             </div>
